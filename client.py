@@ -16,7 +16,7 @@ textinput = TextInputVisualizer(manager=manager)
 # Button
 manager = pygame_gui.UIManager((width, height), 'thems.json')
 button_layout_rect = pg.Rect(160, 24, 100, 20)
-hello_button = pygame_gui.elements.UIButton(relative_rect=pg.Rect((480, 279), (100, 50)),
+jugar_button = pygame_gui.elements.UIButton(relative_rect=pg.Rect((480, 279), (100, 50)),
                                             text='Jugar!',
                                             manager=manager)
 
@@ -50,7 +50,7 @@ def menu_screen():
                         nickname = textinput.value
                 if event.type == pg.USEREVENT:
                     if event.user_type == pygame_gui.UI_BUTTON_PRESSED:
-                        if event.ui_element == hello_button:
+                        if event.ui_element == jugar_button:
                             print('Cargando juego...')
                             inputUser = True
                             nickname = textinput.value
@@ -60,7 +60,7 @@ def menu_screen():
             manager.update(time_delta)
             manager.draw_ui(INTERFACE)
         else:
-            INTERFACE.blit(bgLoading, (0,0)) # cambiar por el background de espera
+            INTERFACE.blit(bgLoading, (0,0))
             for event in pg.event.get():
                 if event.type == pg.QUIT:
                     pg.quit()
@@ -71,8 +71,8 @@ def menu_screen():
                     run = False
                     # esperar orden del servidor para iniciar la partida
                     # cambiar conexion por wsapp y respuesta
-                    playing = GameController(nickname)
-                    playing.main()
+                    gameController = GameController(nickname)
+                    gameController.main()
                     
         pg.display.update()
         clock.tick(30)
