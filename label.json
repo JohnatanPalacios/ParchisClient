@@ -1,0 +1,24 @@
+{
+    "label":
+    {
+        "colours":
+        {
+            "dark_bg": "#FDFEFE",
+            "normal_text": "#F20339",
+            "text_shadow": "#FFF"
+        },
+        "font":
+        {
+            "name": "arial",
+            "size": "20",
+            "bold": "1",
+            "italic": "0"
+        },
+        "misc":
+        {
+            "text_shadow": "0",
+            "text_shadow_size": "0,3",
+            "text_shadow_offset": "0,0"
+        }
+    }
+}

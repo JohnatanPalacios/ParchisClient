@@ -1,0 +1,34 @@
+{
+    "button":
+    {
+        "colours":
+        {
+            "normal_bg": "#d0d0d0",
+            "hovered_bg": "#f4c62a",
+            "active_bg": "#193784",
+            "normal_text": "#000",
+            "hovered_text": "#000",
+            "selected_text": "#fefefe",
+            "normal_border": "#1c90ff",
+            "hovered_border": "#217fd9",
+            "disabled_border": "#217fd9",
+            "selected_border": "#193784",
+            "active_border": "#f4c62a"
+        },
+        "misc":
+        {
+            "shape": "rounded_rectangle",
+            "shape_corner_radius": "5",
+            "border_width": "3",
+            "shadow_width": "5",
+            "tool_tip_delay": "1.0",
+            "text_horiz_alignment": "center",
+            "text_vert_alignment": "center",
+            "state_transitions":
+            {
+                "normal_hovered": "0.5",
+                "hovered_normal": "0.5"
+            }
+        }
+    }
+}
