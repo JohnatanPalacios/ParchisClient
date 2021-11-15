@@ -2,7 +2,8 @@ import pygame as pg
 from pygame_textinput import TextInputManager, TextInputVisualizer
 import pygame_gui
 import json
-import websocket
+import websockets
+import asyncio
 import time
 from GameController import GameController
 from statics import INTERFACE, clock, bgNickname, bgLoading, width, height
@@ -19,6 +20,33 @@ button_layout_rect = pg.Rect(160, 24, 100, 20)
 jugar_button = pygame_gui.elements.UIButton(relative_rect=pg.Rect((480, 279), (100, 50)),
                                             text='Jugar!',
                                             manager=manager)
+
+
+
+
+
+
+class Client:
+    def __init__(self, port='8081'):
+        self.port = port
+        self.uri = "ws://localhost:" + self.port
+        self.__startClient()
+        
+    async def __startClient(self):
+        connection = websockets.connect(uri=self.uri)
+        async with connection as websocket:
+            await asyncio.Future()
+
+        # recibir mensajes
+        # async for messsage in websocket:
+        #     print(messsage)
+            
+        # cerrar conexión
+        # await websocket.close()
+    
+    async def send(self, websocket, message):
+        await websocket.send(json.dumps(message))
+            
 
 
 

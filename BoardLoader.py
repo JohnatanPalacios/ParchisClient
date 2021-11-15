@@ -26,7 +26,7 @@ class BoardLoader:
         
     def __crearTablero(self):
         _boardJson = None
-        with open('assets\Posiciones.json') as posJson:
+        with open('assets/Posiciones.json') as posJson:
             _boardJson = json.load(posJson)
             posJson.close()
 
