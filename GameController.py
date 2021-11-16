@@ -35,7 +35,7 @@ class GameController:
                                     text=self.__nickname,
                                     manager=manager)
         
-    def drawResult(self, playerActive):
+    def __drawResult(self, playerActive):
         d1, d2 = 3, 4 # consultar al servidor el resultad
         self.__dices.setDiceNums(d1, d2, playerActive)
     

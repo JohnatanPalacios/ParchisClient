@@ -1,0 +1,59 @@
+{
+    "type": "players status",
+    "status": [
+        {
+            "id": 2,
+            "username": "test_usr",
+            "color": 1,
+            "pawnsStatus": [
+                {
+                    "id": 0,
+                    "position": 22,
+                    "in_jail": false
+                },
+                {
+                    "id": 1,
+                    "position": 22,
+                    "in_jail": false
+                },
+                {
+                    "id": 2,
+                    "position": 22,
+                    "in_jail": false
+                },
+                {
+                    "id": 3,
+                    "position": 22,
+                    "in_jail": false
+                }
+            ]
+        },
+        {
+            "id": 1,
+            "username": "test_usr2",
+            "color": 0,
+            "pawnsStatus": [
+                {
+                    "id": 0,
+                    "position": 5,
+                    "in_jail": false
+                },
+                {
+                    "id": 1,
+                    "position": 5,
+                    "in_jail": false
+                },
+                {
+                    "id": 2,
+                    "position": 5,
+                    "in_jail": false
+                },
+                {
+                    "id": 3,
+                    "position": 5,
+                    "in_jail": false
+                }
+            ]
+        }
+    ]
+}
