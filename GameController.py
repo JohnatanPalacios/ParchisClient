@@ -21,7 +21,8 @@ manager = pygame_gui.UIManager((width, height), 'label.json')
 
 
 class GameController:
-    def __init__(self, nickname):
+    def __init__(self, nickname, websocket):
+        self.__ws = websocket
         self.__player = 'Azul' # consultar que color es este jugador
         self.__nickname = nickname # recuperar los nickname del servidor
         self.__nicknames()
@@ -95,3 +96,9 @@ class GameController:
         fichasAmarillo.update()
         fichasRojo.update()
         fichasVerde.update()
+
+
+
+
+
+# if "The game has started" == self.ws.getGameState():
