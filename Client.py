@@ -14,10 +14,8 @@ class Client:
             if data:
                 await ws.send(json.dumps(data))
                 self.data = json.loads(await ws.recv())
-                print(json.loads(await ws.recv()))
             else:
                 self.data = json.loads(await ws.recv())
-                print(json.loads(await ws.recv()))
     
     def countPlayers(self):
         asyncio.run(self.conn())
