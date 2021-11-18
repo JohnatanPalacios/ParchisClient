@@ -29,21 +29,16 @@ class Menu:
         self.ws = websocket
         self.run = True
         self.inputUser = False
-        self.nickname = None
+        self.username = None
         self.time_delta = clock.tick(60)/1000.0
 
     def print_players(self):
         # acomodar esto para imprimir los nombres en la ventana
         try:
             for p in self.ws.getPlayers():
-                print(p)
-                print('\n-----PRINT PLAYERS-----n')
+                print('--> Player: {}'.format(p))
         except:
             pass
-    
-    def stop(self):
-        self.run = False
-        pg.quit()
     
     def start(self):
         while self.run:
@@ -55,35 +50,38 @@ class Menu:
                 events = pg.event.get()
                 textinput.update(events)
                 for event in events:
-                    if event.type == pg.QUIT: self.stop()
-                    if event.type == pg.USEREVENT:
+                    if event.type == pg.QUIT:
+                        self.run = False
+                        break
+                    elif event.type == pg.USEREVENT:
                         if event.user_type == pg_gui.UI_BUTTON_PRESSED:
                             if event.ui_element == send_button:
                                 self.inputUser = True
-                                self.nickname = textinput.value
-                                self.ws.setNickname(self.nickname)
+                                self.username = textinput.value
+                                self.ws.setUsername(self.username)
                     manager.process_events(event)
             else:
                 INTERFACE.blit(bgLoading, (0,0))
                 self.print_players()
+                events = pg.event.get()
                 if 2 <= self.ws.countPlayers() <= 4:
                     manager2.draw_ui(INTERFACE)
                     manager2.update(self.time_delta)
-                    events = pg.event.get()
-                    for event in pg.event.get():
-                        if event.type == pg.QUIT: self.stop()
-                        if event.type == pg.USEREVENT:
-                            if event.user_type == pg_gui.UI_BUTTON_PRESSED:
-                                if event.ui_element == play_button:
-                                    self.ws.setGameStart()
-                                    self.run = False
-                                    gameController = GameController(self.nickname, self.ws)
-                                    gameController.main()
                 else:
-                    print('\n-----ESPERANDO JUGADORES-----\n') 
+                    print('\n-----ESPERANDO JUGADORES-----\n')
+                for event in pg.event.get():
+                    if event.type == pg.QUIT:
+                        self.run = False
+                        break
+                    elif event.type == pg.USEREVENT:
+                        if event.user_type == pg_gui.UI_BUTTON_PRESSED:
+                            if event.ui_element == play_button:
+                                self.ws.setGameStart()
+                                self.run = False
+                                gameController = GameController(self.username, self.ws)
+                                gameController.main()
             pg.display.update()
             clock.tick(30)
-
 
 if __name__ == '__main__':
     c = Client()
