@@ -1,14 +1,17 @@
+import os
 import pygame as pg
 
 
-width = 600
-height = 600
-INTERFACE = pg.display.set_mode((width, height))
+path = 'assets/'
+
+WIDTH = 600
+HEIGHT = 600
+INTERFACE = pg.display.set_mode((WIDTH, HEIGHT))
 pg.display.set_caption("Parchis")
-clock = pg.time.Clock()
-time_delta = clock.tick(60)/1000.0
+CLOCK = pg.time.Clock()
+TIME_DELTA = CLOCK.tick(60)/1000.0
 
 
-bg = pg.image.load('assets/Tablero.png')
-bgNickname = pg.image.load('assets/nickname.png')
-bgLoading = pg.image.load('assets/loading.png')
+bg = pg.image.load(os.path.join(path, 'Tablero.png'))
+bgNickname = pg.image.load(os.path.join(path, 'nickname.png'))
+bgLoading = pg.image.load(os.path.join(path, 'loading.png'))

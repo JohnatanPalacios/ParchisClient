@@ -1,7 +1,7 @@
 import pygame as pg
 from Dice import DiceManager
 from BoardLoader import BoardLoader
-from statics import INTERFACE, clock, bg, width, height, time_delta
+from statics import INTERFACE, CLOCK, bg, WIDTH, HEIGHT, TIME_DELTA
 import pygame_gui
 
 
@@ -17,7 +17,7 @@ tablero = BoardLoader(['Azul', 'Amarillo', 'Rojo', 'Verde'],
                       fichasAzul, fichasAmarillo, fichasRojo, fichasVerde)
 board = tablero.getTablero()
 
-manager = pygame_gui.UIManager((width, height), 'label.json')
+manager = pygame_gui.UIManager((WIDTH, HEIGHT), 'label.json')
 
 
 class GameController:
@@ -77,7 +77,7 @@ class GameController:
             
             pg.display.flip()
             pg.display.update()
-            clock.tick(15)
+            CLOCK.tick(15)
     
     def __drawGame(self):
         INTERFACE.blit(bg, (0,0))
@@ -89,7 +89,7 @@ class GameController:
         manager.draw_ui(INTERFACE)
     
     def __updateGroups(self):
-        manager.update(time_delta)
+        manager.update(TIME_DELTA)
         diceNums.update(INTERFACE)
         dices.update()
         fichasAzul.update()

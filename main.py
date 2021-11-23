@@ -1,89 +1,70 @@
 import pygame as pg
 from pygame_textinput import TextInputManager, TextInputVisualizer
 import pygame_gui as pg_gui
-import time
 from GameController import GameController
-from statics import INTERFACE, clock, bgNickname, bgLoading, width, height
+from statics import INTERFACE, CLOCK, bgNickname, bgLoading, WIDTH, HEIGHT, TIME_DELTA
 from Client import Client
+import threading
 
-# PyGame
-pg.init()
 
 # Text nickname
-manager = TextInputManager(validator = lambda input: len(input) <= 15)
+manager = TextInputManager(validator=lambda input: len(input) <= 15)
 textinput = TextInputVisualizer(manager=manager)
 # Button
-manager = pg_gui.UIManager((width, height), 'thems.json')
-manager2 = pg_gui.UIManager((width, height), 'thems.json')
+manager = pg_gui.UIManager((WIDTH, HEIGHT), 'thems.json')
+manager2 = pg_gui.UIManager((WIDTH, HEIGHT), 'thems.json')
 button_layout_rect = pg.Rect(160, 24, 100, 20)
-send_button = pg_gui.elements.UIButton(relative_rect=pg.Rect((480, 279), (100, 50)),
-                                            text='OK!',
-                                            manager=manager)
-play_button = pg_gui.elements.UIButton(relative_rect=pg.Rect((480, 279), (100, 50)),
-                                            text='Jugar!',
-                                            manager=manager2)
+button = pg_gui.elements.UIButton(relative_rect=pg.Rect((480, 279), (100, 50)),
+                                    text='Enviar',
+                                    manager=manager)
 
 
 class Menu:
     def __init__(self, websocket):
         self.ws = websocket
         self.run = True
-        self.inputUser = False
         self.username = None
-        self.time_delta = clock.tick(60)/1000.0
 
     def print_players(self):
-        # acomodar esto para imprimir los nombres en la ventana
-        try:
-            for p in self.ws.getPlayers():
-                print('--> Player: {}'.format(p))
-        except:
-            pass
-    
+        pos = {0: (100,280), 1: (230,280),
+                2: (100,300), 3: (230,300)}
+        fuente = pg.font.Font(None, 30)
+        for p in range(len(self.ws.players)):
+            text = fuente.render(self.ws.players[p], 1, (255,255,255))
+            INTERFACE.blit(text, pos[p])
+
     def start(self):
         while self.run:
-            if not self.inputUser:
+            events = pg.event.get()
+            for event in events:
+                if event.type == pg.QUIT: self.run = False
+                manager.process_events(event)
+            if not self.username:
                 INTERFACE.blit(bgNickname, (0,0))
                 INTERFACE.blit(textinput.surface, (208, 295))
-                manager.draw_ui(INTERFACE)
-                manager.update(self.time_delta)
-                events = pg.event.get()
                 textinput.update(events)
-                for event in events:
-                    if event.type == pg.QUIT:
-                        self.run = False
-                        break
-                    elif event.type == pg.USEREVENT:
-                        if event.user_type == pg_gui.UI_BUTTON_PRESSED:
-                            if event.ui_element == send_button:
-                                self.inputUser = True
-                                self.username = textinput.value
-                                self.ws.setUsername(self.username)
-                    manager.process_events(event)
+                if button.check_pressed():
+                    self.username = textinput.value
+                    self.ws.setUsername(self.username)
+                    button.set_text(text='Jugar!')
             else:
-                INTERFACE.blit(bgLoading, (0,0))
+                threading.Thread(target=self.ws.conn).start()
                 self.print_players()
-                events = pg.event.get()
-                if 2 <= self.ws.countPlayers() <= 4:
-                    manager2.draw_ui(INTERFACE)
-                    manager2.update(self.time_delta)
-                else:
-                    print('\n-----ESPERANDO JUGADORES-----\n')
-                for event in pg.event.get():
-                    if event.type == pg.QUIT:
-                        self.run = False
-                        break
-                    elif event.type == pg.USEREVENT:
-                        if event.user_type == pg_gui.UI_BUTTON_PRESSED:
-                            if event.ui_element == play_button:
-                                self.ws.setGameStart()
-                                self.run = False
-                                gameController = GameController(self.username, self.ws)
-                                gameController.main()
+                INTERFACE.blit(bgLoading, (0,0))
+                if 2 <= len(self.ws.players) <= 4 and button.check_pressed():
+                    threading.Thread(target=self.ws.setGameStart).start()
+                    self.run = False
+                    gameController = GameController(self.username, self.ws)
+                    gameController.main()
+            manager.update(TIME_DELTA)
+            manager.draw_ui(INTERFACE)
             pg.display.update()
-            clock.tick(30)
+            CLOCK.tick(30)
+
 
 if __name__ == '__main__':
+    pg.init()
+    pg.font.init()
     c = Client()
     menu = Menu(c)
     menu.start()
