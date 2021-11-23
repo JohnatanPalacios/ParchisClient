@@ -2,9 +2,8 @@ import pygame as pg
 from pygame_textinput import TextInputManager, TextInputVisualizer
 import pygame_gui as pg_gui
 from GameController import GameController
-from statics import INTERFACE, CLOCK, bgNickname, bgLoading, WIDTH, HEIGHT, TIME_DELTA
+from statics import INTERFACE, CLOCK, BG_NICKNAME, BG_LOADING, WIDTH, HEIGHT, TIME_DELTA
 from Client import Client
-import threading
 
 
 # Text nickname
@@ -20,7 +19,7 @@ button = pg_gui.elements.UIButton(relative_rect=pg.Rect((480, 279), (100, 50)),
 
 
 class Menu:
-    def __init__(self, websocket):
+    def __init__(self, websocket=None):
         self.ws = websocket
         self.run = True
         self.username = None
@@ -40,19 +39,18 @@ class Menu:
                 if event.type == pg.QUIT: self.run = False
                 manager.process_events(event)
             if not self.username:
-                INTERFACE.blit(bgNickname, (0,0))
+                INTERFACE.blit(BG_NICKNAME, (0,0))
                 INTERFACE.blit(textinput.surface, (208, 295))
                 textinput.update(events)
                 if button.check_pressed():
                     self.username = textinput.value
-                    self.ws.setUsername(self.username)
+                    self.ws = Client(username=self.username)
                     button.set_text(text='Jugar!')
             else:
-                threading.Thread(target=self.ws.conn).start()
                 self.print_players()
-                INTERFACE.blit(bgLoading, (0,0))
+                INTERFACE.blit(BG_LOADING, (0,0))
                 if 2 <= len(self.ws.players) <= 4 and button.check_pressed():
-                    threading.Thread(target=self.ws.setGameStart).start()
+                    self.ws.send({"start_status":"true"})
                     self.run = False
                     gameController = GameController(self.username, self.ws)
                     gameController.main()
@@ -65,8 +63,8 @@ class Menu:
 if __name__ == '__main__':
     pg.init()
     pg.font.init()
-    c = Client()
-    menu = Menu(c)
+    # c = Client()
+    menu = Menu()
     menu.start()
     pg.quit()
  

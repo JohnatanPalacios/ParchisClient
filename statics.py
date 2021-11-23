@@ -12,6 +12,6 @@ CLOCK = pg.time.Clock()
 TIME_DELTA = CLOCK.tick(60)/1000.0
 
 
-bg = pg.image.load(os.path.join(path, 'Tablero.png'))
-bgNickname = pg.image.load(os.path.join(path, 'nickname.png'))
-bgLoading = pg.image.load(os.path.join(path, 'loading.png'))
+BG = pg.image.load(os.path.join(path, 'Tablero.png'))
+BG_NICKNAME = pg.image.load(os.path.join(path, 'nickname.png'))
+BG_LOADING = pg.image.load(os.path.join(path, 'loading.png'))
