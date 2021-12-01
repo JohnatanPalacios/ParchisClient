@@ -54,13 +54,13 @@ class DiceManager:
     
     def __createDices(self):
         dice1 = Dice(**{'address': 'assets/spriteDados.png',
-               'size': (157,158),
-               'pos': [235,268],
-               'frames': 4})
+                        'size': (157,158),
+                        'pos': [235,268],
+                        'frames': 4})
         dice2 = Dice(**{'address': 'assets/spriteDados.png',
-                    'size': (157,158),
-                    'pos': [300,268],
-                    'frames': 4})
+                        'size': (157,158),
+                        'pos': [300,268],
+                        'frames': 4})
         self.dices.add(dice1, dice2)
         
     def __createDiceNumbers(self):
@@ -71,7 +71,8 @@ class DiceManager:
                               '5': DiceNum('assets/dado5.png'),
                               '6': DiceNum('assets/dado6.png')}
     
-    def setDiceNums(self, d1, d2, playerActive):
-        _d1 = self.__diceNumbers[d1].setPos(playerActive)
-        _d2 = self.__diceNumbers[d2].setPos(playerActive)
-        self.diceNums.add(_d1, _d2)
+    def setDiceNums(self, dices_result, color):
+        d1, d2 = dices_result
+        _d1 = self.__diceNumbers[d1].setPos(color)
+        _d2 = self.__diceNumbers[d2].setPos(color)
+        self.diceNums.add(_d1, _d2) # OJO limpiar los resultados anteriores

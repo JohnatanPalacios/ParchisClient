@@ -8,83 +8,44 @@ class Client:
         self.username = username
         self.port = port
         self.ws = None
-        self.data = dict()
-        self.start_status = None
+        self.status = None
         self.operation = None
         self.players = list()
-        self.start()
-    
-    def start(self):
+        self.player_status = list()
+        self.current_turn = None
+        self.dices_result = list()
+        #### create conexion ####
         websocket.enableTrace(True)
         self.ws = websocket.WebSocketApp("ws://localhost:" + self.port + "/",
                                             on_open = self.on_open,
                                             on_message = self.on_message,
-                                            on_error = self.on_error,
-                                            on_close = self.on_close)
+                                            on_error = self.on_error)
         self.ws.run_forever()
 
     def on_message(self, ws, message):
         temp =json.loads(message)
-        if 'players' in temp: self.players = [p.get('username') for p in temp.get('players')]
-        elif 'start_status' in temp: self.start_status = temp.get('start_status')
-        self.data = temp
-        print(message)
+        if 'new player' in temp:
+            self.players = temp.get('players')
+        elif 'start_status' in temp:
+            self.status = temp.get('start_status')
+        elif "state" in temp and "message" in temp:
+            self.status = temp.get('message')
+        elif "players status" in temp:
+            self.players = temp.get('status')
+        elif "current turn" in temp:
+            self.current_turn = temp.get('current_turn')
+        elif "dice result" in temp:
+            self.dices_result = temp.get('dice_result')
 
     def on_error(self, ws, error):
         print(error)
-        print('Reconectando')
-        #self.start()
-
-    def on_close(self, ws):
-        print("#----- Closed -----#")
     
     def on_open(self, ws):
         def run(*args):
             ws.send(json.dumps({'username':self.username}))
         Thread(target=run).start()
     
-    def send(self, value):
-        msg = json.dumps(value)
+    def send(self, msg):
         def sending(*args):
-            if 'start_status' in value and not self.start_status: self.ws.send(msg)
+            self.ws.send(json.dumps(msg))
         Thread(target=sending).start()
-
-
-
-
-
-# from websocket import create_connection
-# import _thread
-# class Client:
-#     def __init__(self, port='8081'):
-#         self.port = port
-#         self.data = dict()
-#         self.ws = create_connection("ws://localhost:" + self.port + "/")
-#         self.start_status = None
-#         self.operation = None
-#         self.players = list()
-
-#     def conn(self, data=False):
-#         if data:
-#             self.ws.send(json.dumps(data))
-#             self.data = json.loads(self.ws.recv())
-#             try:
-#                 self.players = [p.get('username') for p in self.data.get('players')]
-#             except:
-#                 pass
-#         else:
-#             try:
-#                 self.players = [p.get('username') for p in self.data.get('players')]
-#             except:
-#                 pass
-#             self.data = json.loads(self.ws.recv())
-
-#     def getGameState(self):
-#         self.conn()
-#         return self.data.get('state')
-    
-#     def setGameStart(self):
-#         if not self.start_status: self.conn({"start_status":"true"})
-
-#     def setUsername(self, username):
-#         self.conn({"username": username})

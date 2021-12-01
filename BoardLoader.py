@@ -1,6 +1,6 @@
 import json
 import pygame as pg
-from Ficha import Ficha
+from Pawn import Pawn
 
 
 f_locate = {'Azul': 'assets/azul.png',
@@ -29,9 +29,7 @@ class BoardLoader:
         with open('assets/Posiciones.json') as posJson:
             _boardJson = json.load(posJson)
             posJson.close()
-
         _tableroTemp = _boardJson['layers'][1]['objects']
-        
         for i in _tableroTemp:
             self.tablero[i['name']] = {'taken': False, 'pos': (i['x'], i['y'])}
         
@@ -39,7 +37,7 @@ class BoardLoader:
         for j in self.jugadores:
             for i in range(4):
                 name = 'carcel' + j + '_' + str(i+1)
-                ficha = Ficha(**{'address': f_locate[j],
+                ficha = Pawn(**{'address': f_locate[j],
                                  'id': i+1,
                                  'name': j,
                                  'pos': self.tablero[name]['pos']})
