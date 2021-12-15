@@ -31,6 +31,7 @@ def menu():
             manager.process_events(event)
 
         if button.check_pressed() and textinput.value:
+            pg.display.set_caption("Parchis   " + textinput.value)
             run = False
             return textinput.value
         

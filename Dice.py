@@ -2,10 +2,11 @@ import pygame as pg
 
 
 # posiciones para mostrar el resultado de los dados al jugador
-pPos = {'Azul': [[82, 50], [135, 50]],
-        'Amarillo': [[417, 50], [470, 50]],
-        'Rojo': [[82, 502], [135, 502]],
-        'Verde': [[417, 502], [470, 502]]}
+# {0:'Azul', 1:'Amarillo', 2:'Rojo', 3:'Verde'}
+pPos = {0: [[82, 50], [135, 50]],
+        1: [[417, 50], [470, 50]],
+        2: [[82, 502], [135, 502]],
+        3: [[417, 502], [470, 502]]}
 
 
 class Dice(pg.sprite.Sprite):
@@ -30,6 +31,9 @@ class Dice(pg.sprite.Sprite):
         if self.current_sprite >= len(self.sprites):
             self.current_sprite = 0
         self.image = self.sprites[self.current_sprite]
+    
+    def is_clicked(self):
+        return pg.mouse.get_pressed()[0] and self.rect.collidepoint(pg.mouse.get_pos())
 
 
 class DiceNum(pg.sprite.Sprite):
@@ -40,8 +44,8 @@ class DiceNum(pg.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.topleft = pos
     
-    def setPos(self, playerActive):
-        self.rect.topleft = pPos[playerActive]
+    def setPos(self, pos):
+        self.rect.topleft = pos
 
 
 class DiceManager:
@@ -64,15 +68,20 @@ class DiceManager:
         self.dices.add(dice1, dice2)
         
     def __createDiceNumbers(self):
-        self.__diceNumbers = {'1': DiceNum('assets/dado1.png'),
-                              '2': DiceNum('assets/dado2.png'),
-                              '3': DiceNum('assets/dado3.png'),
-                              '4': DiceNum('assets/dado4.png'),
-                              '5': DiceNum('assets/dado5.png'),
-                              '6': DiceNum('assets/dado6.png')}
+        dn1 = DiceNum('assets/dado1.png')
+        dn2 = DiceNum('assets/dado2.png')
+        dn3 = DiceNum('assets/dado3.png')
+        dn4 = DiceNum('assets/dado4.png')
+        dn5 = DiceNum('assets/dado5.png')
+        dn6 = DiceNum('assets/dado6.png')
+        self.__diceNumbers = {1: dn1, 2: dn2, 3: dn3, 4: dn4, 5: dn5, 6: dn6}
     
     def setDiceNums(self, dices_result, color):
-        d1, d2 = dices_result
-        _d1 = self.__diceNumbers[d1].setPos(color)
-        _d2 = self.__diceNumbers[d2].setPos(color)
-        self.diceNums.add(_d1, _d2) # OJO limpiar los resultados anteriores
+        dr1, dr2 = dices_result
+        path1 = 'assets/dado' + str(dr1) + '.png'
+        path2 = 'assets/dado' + str(dr2) + '.png'
+        pos1, pos2 = pPos[color][0], pPos[color][1]
+        
+        d1 = DiceNum(path1, pos1)
+        d2 = DiceNum(path2, pos2)
+        self.diceNums.add(d1, d2)
