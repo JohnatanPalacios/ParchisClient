@@ -2,11 +2,11 @@ import pygame as pg
 
 
 # posiciones para mostrar el resultado de los dados al jugador
-# {0:'Azul', 1:'Amarillo', 2:'Rojo', 3:'Verde'}
-pPos = {0: [[82, 50], [135, 50]],
-        1: [[417, 50], [470, 50]],
-        2: [[82, 502], [135, 502]],
-        3: [[417, 502], [470, 502]]}
+# {0:'Amarillo', 1:'Verde', 2:'Rojo', 3:'Azul'}
+pPos = {2: [[82, 502], [135, 502]],
+        1: [[417, 502], [470, 502]],
+        0: [[417, 50], [470, 50]],
+        3: [[82, 50], [135, 50]]}
 
 
 class Dice(pg.sprite.Sprite):
@@ -52,9 +52,7 @@ class DiceManager:
     def __init__(self, dices, diceNums):
         self.dices = dices
         self.diceNums = diceNums
-        self.__diceNumbers = dict()
         self.__createDices()
-        self.__createDiceNumbers()
     
     def __createDices(self):
         dice1 = Dice(**{'address': 'assets/spriteDados.png',
@@ -66,15 +64,6 @@ class DiceManager:
                         'pos': [300,268],
                         'frames': 4})
         self.dices.add(dice1, dice2)
-        
-    def __createDiceNumbers(self):
-        dn1 = DiceNum('assets/dado1.png')
-        dn2 = DiceNum('assets/dado2.png')
-        dn3 = DiceNum('assets/dado3.png')
-        dn4 = DiceNum('assets/dado4.png')
-        dn5 = DiceNum('assets/dado5.png')
-        dn6 = DiceNum('assets/dado6.png')
-        self.__diceNumbers = {1: dn1, 2: dn2, 3: dn3, 4: dn4, 5: dn5, 6: dn6}
     
     def setDiceNums(self, dices_result, color):
         dr1, dr2 = dices_result

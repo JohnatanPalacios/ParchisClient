@@ -19,10 +19,12 @@ class BoardLoader:
         self.tablero = dict()
         self.__crearTablero()
         self.__crearFichas()
-        self.players = pg.font.SysFont
     
     def getTablero(self):
         return self.tablero
+    
+    def getPos(self, name):
+        return self.tablero[name]['x'],self.tablero[name]['y']
         
     def __crearTablero(self):
         _boardJson = None
@@ -31,16 +33,14 @@ class BoardLoader:
             posJson.close()
         _tableroTemp = _boardJson['layers'][1]['objects']
         for i in _tableroTemp:
-            self.tablero[i['name']] = {'taken': False, 'pos': (i['x'], i['y'])}
+            self.tablero[i["name"]] = {'x': i['x'], 'y': i['y']} # 'taken': False
         
     def __crearFichas(self):
         for j in self.jugadores:
             for i in range(4):
                 name = 'carcel' + j + '_' + str(i+1)
                 ficha = Pawn(**{'address': f_locate[j],
-                                 'id': i+1,
-                                 'name': j,
-                                 'pos': self.tablero[name]['pos']})
+                                 'id': i,
+                                 'pos': self.getPos(name)})
                 self.tablero['taken'] = True
                 self.fichasAzul.add(ficha)
-                        

@@ -14,6 +14,7 @@ class Client:
         self.estado_jugadores = list()
         self.resultado_dados = list()
         self.liberar_fichas = False
+        self.color = None
         #### create conexion ####
         websocket.enableTrace(True)
         self.ws = websocket.WebSocketApp("ws://localhost:" + self.port + "/",
@@ -40,7 +41,10 @@ class Client:
             self.resultado_dados = self.data["message"]
         if self.data["type"] == "exit jail":
             self.liberar_fichas = self.data["message"] # "Your pawns have exit jail"
-        
+        if not self.color:
+            for j in self.jugadores:
+                if self.username == j["username"]:
+                    self.color = j["color"]
 
     def on_error(self, ws, error):
         print(error)
